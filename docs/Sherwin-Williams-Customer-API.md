@@ -3,7 +3,7 @@ stoplight-id: q0oruoxshoqwl
 internal: true
 ---
 
-![image.png](https://github.com/rxp840/swhacks2022-stoplight/blob/main/images/sw.png)
+![image.png](../images/sw.png)
 
 
 # API Management
