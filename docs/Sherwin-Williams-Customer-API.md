@@ -3,7 +3,8 @@ stoplight-id: q0oruoxshoqwl
 internal: true
 ---
 
-![image.png](https://stoplight.io/api/v1/projects/cHJqOjE0MDY4MQ/images/j0heuCtL5i4)
+![image.png](https://github.com/rxp840/swhacks2022-stoplight/blob/main/images/sw.png)
+
 
 # API Management
 Equipped with our services and open API platform, we provide you the chance to reach, test and use Sherwin’s digital services. Using these, you now have the power of Sherwin supporting you to develop the next generation of applications. Check out how you can do it;
