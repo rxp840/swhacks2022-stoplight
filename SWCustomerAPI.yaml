@@ -1,0 +1,443 @@
+openapi: 3.0.0
+x-stoplight:
+  id: g8q6gp0i5xz01
+info:
+  title: SW Customer API
+  description: Customer API
+  contact:
+    email: me@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+servers:
+  - url: 'https://stoplight.io/mocks/swdemoaccount/swcustomer/69689887'
+    description: To be corrected with Prism Mocking server to be added
+security:
+  - swcustomer_auth:
+      - 'write:customer'
+      - 'read:customer'
+tags:
+  - name: Customer
+    description: Everything about Customer
+paths:
+  /customerdetails:
+    get:
+      tags:
+        - Customer
+      summary: Fetch Customers by Operating Unit
+      description: 'This API retrieves all the customers against a region, the purpose of this functionality is to find the account number if the customer is not having it. It is advised to use this API only if you are not having the customer number. '
+      operationId: getCustomerByOU
+      parameters:
+        - name: ouId
+          in: query
+          description: All Customer details from a specific Operating will be fetched
+          required: false
+          style: form
+          explode: true
+          schema:
+            items:
+              type: integer
+              format: int32
+            type: integer
+        - schema:
+            type: integer
+          in: query
+          name: skip
+          description: number of records to skip for pagination
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerAccount'
+              examples:
+                custaccount:
+                  value:
+                    - cust_account_id: 100100
+                      organization_id: 1630
+                      operating_unit: SWMY CL OU
+                      customer_name: MALPLAST INDUSTRIES
+                      customer_alias: MALPLAST INDUSTRIES Malaysia
+                      account_number: '0001'
+                      party_id: 200200
+                      customer_type: External
+        '400':
+          description: Invalid Operating Unit
+    post:
+      tags:
+        - Customer
+      summary: Add Customer
+      description: 'A new customer will be created for you. Mandatory details like the customer name, account type, shipping and billing address, contact information, banking details needs to be provided. The account number generated will be a unique identifier. Keeping a note of the account number will make it easy to use the APIs which extracts information regarding the customer, customer orders, addresses, payment details etc.'
+      operationId: addCustomer
+      requestBody:
+        description: Customer details will be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerAccountDML'
+            examples:
+              CustomerAccountDML:
+                value:
+                  organization_id: -2147483648
+                  operating_unit: SWMYCL OU
+                  customer_name: My Customer Name
+                  customer_alias: Alias Customer Name
+                  customer_type: Internal
+        required: true
+      responses:
+        '200':
+          description: 'The response of this request will be the below information, keeping a note of the account number will make it easier for future use of the APIs. '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerAccount'
+              examples:
+                CustomerAccount:
+                  value:
+                    cust_account_id: 100100
+                    organization_id: 1630
+                    operating_unit: SWMY CL OU
+                    customer_name: MALPLAST INDUSTRIES
+                    customer_alias: MALPLAST INDUSTRIES Malaysia
+                    account_number: '0001'
+                    party_id: 200200
+                    customer_type: External
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    parameters: []
+  '/customerdetails/{customerId}':
+    get:
+      tags:
+        - Customer
+      summary: Fetch Customer by Customer Number
+      description: 'This API can be used to fetch the registered information of the customers. Address, bank details, contact information etc can be retrieved using this API. '
+      operationId: getCustomerByCustNo
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer details will be fetched by Customer Number
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerDetailedInfo'
+              examples:
+                custaccountinfo:
+                  value:
+                    - cust_account_id: 100100
+                      organization_id: 1630
+                      operating_unit: SWMY CL OU
+                      customer_name: MALPLAST INDUSTRIES
+                      customer_alias: MALPLAST INDUSTRIES Malaysia
+                      account_number: '0001'
+                      party_id: 200200
+                      customer_type: External
+                      Billing_Info:
+                        Primary: true
+                        BillSiteId: 201
+                        BillLocaName: Billing Location Name1
+                        BillAddress: Billing Address1
+                      Shipping_Info:
+                        Primary: true
+                        ShippSiteId: 202
+                        ShipLocName: Shipping Location Name1
+                        ShippAddress: Shipping Address1
+        '400':
+          description: Invalid Operating Unit
+      security:
+        - swcustomer_auth:
+            - 'write:customer'
+            - 'read:customer'
+      x-internal: true
+    put:
+      tags:
+        - Customer
+      summary: Update Customer
+      operationId: put-customeraccountdtls-customerId
+      parameters:
+        - name: customerId
+          in: path
+          description: This method/operation will update Customer Account details
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: Successful update operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerDetailedInfo'
+              examples:
+                custaccountinfo:
+                  value:
+                    - cust_account_id: 100100
+                      organization_id: 1630
+                      operating_unit: SWMY CL OU
+                      customer_name: MALPLAST INDUSTRIES
+                      customer_alias: MALPLAST INDUSTRIES Malaysia
+                      account_number: '0001'
+                      party_id: 200200
+                      customer_type: External
+                      Billing_Info:
+                        Primary: true
+                        BillSiteId: 201
+                        BillLocaName: Billing Location Name1
+                        BillAddress: Billing Address1
+                      Shipping_Info:
+                        Primary: true
+                        ShippSiteId: 202
+                        ShipLocName: Shipping Location Name1
+                        ShippAddress: Shipping Address1
+      description: |-
+        This API can be used to update customer information given below
+        Shipping Address
+        Billing Address
+        Bank Details
+        Contact Information
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerAccountDML'
+            examples:
+              example-1:
+                value:
+                  organization_id: -2147483648
+                  operating_unit: SWMYCL OU
+                  customer_name: My Customer Name
+                  customer_alias: Alias Customer Name
+                  customer_type: Internal
+        description: ''
+    delete:
+      tags:
+        - Customer
+      summary: Delete Customer.
+      description: 'This API is used to delete the customer. The valid customer account number should be provided as input. The customer will be deleted only if there are no open orders and no pending payments. If there is no acitvity from the customer for a period of 3yrs, the account will be automatically disabled. '
+      operationId: deleteCustomer
+      parameters:
+        - name: customerId
+          in: path
+          description: Customer Id to delete
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Customer Deleted
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    CustomerAccount:
+      title: CustomerAccount
+      type: object
+      properties:
+        cust_account_id:
+          type: integer
+        organization_id:
+          type: integer
+        operating_unit:
+          type: string
+        customer_name:
+          type: string
+        customer_alias:
+          type: string
+        account_number:
+          type: string
+        party_id:
+          type: integer
+        customer_type:
+          type: string
+    CustomerDetailedInfo:
+      required:
+        - cust_account_id
+      type: object
+      properties:
+        cust_account_id:
+          type: integer
+        organization_id:
+          type: integer
+        operating_unit:
+          type: string
+        customer_name:
+          type: string
+        customer_alias:
+          type: string
+        account_number:
+          type: string
+        party_id:
+          type: integer
+        customer_type:
+          type: string
+        Billing_Info:
+          $ref: '#/components/schemas/Billing_Info'
+        Shipping_Info:
+          $ref: '#/components/schemas/Shipping_Info'
+      xml:
+        name: custaccountinfo
+      description: ''
+      title: ''
+      x-examples:
+        example-1:
+          cust_account_id: -2147483648
+          organization_id: -2147483648
+          operating_unit: string
+          customer_name: string
+          customer_alias: string
+          account_number: string
+          party_id: -2147483648
+          customer_type: string
+          Billing_Info:
+            Primary: true
+            BillSiteId: 201
+            BillLocaName: Billing Location Name1
+            BillAddress: Billing Address1
+          Shipping_Info:
+            Primary: true
+            ShippSiteId: 202
+            ShipLocName: Shipping Location Name1
+            ShippAddress: Shipping Address1
+    CustomerAccountDML:
+      required:
+        - customer_name
+      type: object
+      properties:
+        operating_unit:
+          type: string
+        customer_name:
+          type: string
+        customer_alias:
+          type: string
+        customer_type:
+          type: string
+    Billing_Info:
+      type: object
+      properties:
+        Primary:
+          type: boolean
+        BillSiteId:
+          type: integer
+          format: int32
+        BillLocName:
+          type: string
+        BillAddress:
+          type: string
+      example:
+        Primary: true
+        BillSiteId: 201
+        BillLocaName: Billing Location Name1
+        BillAddress: Billing Address1
+    Shipping_Info:
+      type: object
+      properties:
+        primary:
+          type: boolean
+        shipSiteId:
+          type: integer
+          format: int32
+        shipLocName:
+          type: string
+        shipAddress:
+          type: string
+      example:
+        Primary: true
+        ShippSiteId: 202
+        ShipLocName: Shipping Location Name1
+        ShippAddress: Shipping Address1
+    UpdateCustomer:
+      title: UpdateCustomer
+      x-stoplight:
+        id: 10u19m1b5yn1q
+      type: object
+      x-examples:
+        example-1:
+          CustName: string
+          Billing_Info:
+            Primary: true
+            BillLocaName: Billing Location Name1
+            BillAddress: Billing Address1
+          Shipping_Info:
+            Primary: true
+            ShipLocName: Shipping Location Name1
+            ShippAddress: Shipping Address1
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    inline_response_401:
+      type: object
+      properties:
+        message:
+          type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    tokenAuth:
+      type: apiKey
+      name: apiKey
+      in: query
+    swcustomer_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http://example.org/api/oauth/dialog'
+          scopes:
+            'write:customer': Test
+            'read:customer': Test
