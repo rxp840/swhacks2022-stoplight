@@ -11,7 +11,7 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
   version: 1.0.0
 servers:
-  - url: 'https://stoplight.io/mocks/swdemoaccount/swcustomer/69689887'
+  - url: 'https://stoplight.io/mocks/swdemoaccount/swhacks2022-stoplight/69689887'
     description: To be corrected with Prism Mocking server to be added
 tags:
   - name: Customer
