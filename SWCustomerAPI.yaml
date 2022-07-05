@@ -130,6 +130,7 @@ paths:
           style: simple
           explode: false
           schema:
+            type: array
             items:
               type: integer
       responses:
@@ -164,11 +165,6 @@ paths:
                         ShippAddress: Shipping Address1
         '400':
           description: Invalid Operating Unit
-      security:
-        - swcustomer_auth:
-            - 'write:customer'
-            - 'read:customer'
-      x-internal: true
     put:
       tags:
         - Customer
