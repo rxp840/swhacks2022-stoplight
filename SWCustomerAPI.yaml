@@ -13,10 +13,6 @@ info:
 servers:
   - url: 'https://stoplight.io/mocks/swdemoaccount/swcustomer/69689887'
     description: To be corrected with Prism Mocking server to be added
-security:
-  - swcustomer_auth:
-      - 'write:customer'
-      - 'read:customer'
 tags:
   - name: Customer
     description: Everything about Customer
